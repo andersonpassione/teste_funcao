@@ -1,1 +1,56 @@
---script
+--Scripts utilizados para entrevista
+--BD Já estava criando, unicas modificações necessárias
+
+--Adicionando campo CPF e definindo como unico para garantir que não haja CPF duplicados
+ALTER TABLE [dbo].[CLIENTES]
+ADD [CPF] VARCHAR(11) NOT NULL,
+CONSTRAINT UC_CPF UNIQUE ([CPF]);
+
+ALTER TABLE [dbo].[BENEFICIARIOS]
+ADD [CPF] VARCHAR(11) NOT NULL,
+CONSTRAINT UC_CPF UNIQUE ([CPF]);
+
+--Relacionando tabela CLIENTES com BENEFICIARIOS
+ALTER TABLE [dbo].[BENEFICIARIOS]
+ADD CONSTRAINT [FK_BENEFICIARIOS_CLIENTES]
+FOREIGN KEY ([IDCLIENTE])
+REFERENCES [dbo].[CLIENTES] ([ID]);
+
+--Criando indice na tabela BENEFICIARIOS para melhorar consulta
+CREATE INDEX [IDX_BENEFICIARIOS_IDCLIENTE]
+ON [dbo].[BENEFICIARIOS] ([IDCLIENTE]);
+
+
+
+
+--
+--Caso fosse necessário criar do zero:
+CREATE TABLE [dbo].[CLIENTES] (
+    [ID]            BIGINT         IDENTITY (1, 1) NOT NULL,
+    [NOME]          VARCHAR (50)   NOT NULL,
+    [SOBRENOME]     VARCHAR (255)  NOT NULL,
+    [NACIONALIDADE] VARCHAR (50)   NOT NULL,
+    [CEP]           VARCHAR (9)    NOT NULL,
+    [ESTADO]        VARCHAR (2)    NOT NULL,
+    [CIDADE]        VARCHAR (50)   NOT NULL,
+    [LOGRADOURO]    VARCHAR (500)  NOT NULL,
+    [EMAIL]         VARCHAR (2079) NULL,
+    [TELEFONE]      VARCHAR (15)   NULL,
+    [CPF]           VARCHAR (11)   NOT NULL,
+    PRIMARY KEY CLUSTERED ([ID] ASC),
+    CONSTRAINT [UC_CPF] UNIQUE NONCLUSTERED ([CPF] ASC)
+);
+
+CREATE TABLE [dbo].[BENEFICIARIOS] (
+    [ID]        BIGINT       IDENTITY (1, 1) NOT NULL,
+    [CPF]       VARCHAR (11) NOT NULL,
+    [NOME]      VARCHAR (50) NOT NULL,
+    [IDCLIENTE] BIGINT       NOT NULL,
+    PRIMARY KEY CLUSTERED ([ID] ASC),
+    CONSTRAINT [FK_BENEFICIARIOS_CLIENTES] FOREIGN KEY ([IDCLIENTE]) REFERENCES [dbo].[CLIENTES] ([ID])
+);
+
+--Cria indice
+GO
+CREATE NONCLUSTERED INDEX [IDX_BENEFICIARIOS_IDCLIENTE]
+    ON [dbo].[BENEFICIARIOS]([IDCLIENTE] ASC);	
