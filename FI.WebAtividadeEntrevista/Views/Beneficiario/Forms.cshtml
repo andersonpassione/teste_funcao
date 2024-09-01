@@ -1,0 +1,20 @@
+﻿<script src="~/Scripts/Validacoes.js"></script>
+<form id="formCadastro" method="post">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="Cpf">CPF:</label>
+                <input required="required" type="text" class="form-control" id="Cpf" name="Cpf" placeholder="Ex.: 010.011.111-00" maxlength="14" pattern="[0-9]{3}\.[0-9]{3}\.[0-9]{3}-[0-9]{2}" oninput="formatarCpf(this)">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="Nome">Nome:</label>
+                <input required="required" type="text" class="form-control" id="Nome" name="Nome" placeholder="Ex.: João" maxlength="50">
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <button type="submit" class="btn btn-sm btn-success">Incluir</button>
+        </div>
+    </div>
+</form>
